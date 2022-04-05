@@ -7,6 +7,8 @@ const { authMiddleware } = require("./middleware");
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const productRouter = require("./routes/product");
+const cartRouter = require("./routes/carts");
+const categoryRouter = require("./routes/categories");
 
 const app = express();
 
@@ -20,6 +22,8 @@ const prefix = "/api/v1";
 app.use(prefix, authRouter);
 app.use(authMiddleware);
 app.use(prefix, productRouter);
+app.use(prefix, cartRouter);
+app.use(prefix, categoryRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;

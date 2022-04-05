@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const { Product, Category } = require("../../models");
 const { paginationObj } = require("../../helpers");
 const { baseUrl, dbDialect } = require("../../config");
+const { Model } = require("sequelize");
 
 const queryBuilder = (q, start, end) => {
   const obj = {};
