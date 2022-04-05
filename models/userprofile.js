@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   UserProfile.init(
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       phone_number: {
         type: DataTypes.STRING,
         allowNull: true,
