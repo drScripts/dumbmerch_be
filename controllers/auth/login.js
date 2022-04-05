@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     if (!compareSync(password, user.password))
       return res.status(401).json({
         status: "error",
-        message: "Wrong password!",
+        message: "Wrong password !",
       });
 
     delete user.dataValues.password;
