@@ -9,6 +9,7 @@ const usersRouter = require("./routes/users");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/carts");
 const categoryRouter = require("./routes/categories");
+const shipmentRouter = require("./routes/shipment");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(authMiddleware);
 app.use(prefix, productRouter);
 app.use(prefix, cartRouter);
 app.use(prefix, categoryRouter);
+app.use(prefix, shipmentRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;

@@ -7,8 +7,6 @@ const { request, response } = require("express");
  * @param {*} next
  */
 module.exports = (req, res, next) => {
-  console.log(req.user);
-
   if (!req.user)
     return res.status(403).json({
       status: "Restricted Area",
