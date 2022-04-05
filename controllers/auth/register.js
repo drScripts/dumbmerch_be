@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
     return res.status(201).json({
       status: "created",
       data: {
-        newUser,
+        user: newUser,
         token: getJwtToken(newUser.dataValues),
         token_type: "Bearer",
       },

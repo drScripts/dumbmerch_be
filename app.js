@@ -10,6 +10,7 @@ const productRouter = require("./routes/product");
 const cartRouter = require("./routes/carts");
 const categoryRouter = require("./routes/categories");
 const shipmentRouter = require("./routes/shipment");
+const transactionRouter = require("./routes/transaction");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(prefix, productRouter);
 app.use(prefix, cartRouter);
 app.use(prefix, categoryRouter);
 app.use(prefix, shipmentRouter);
+app.use(prefix, transactionRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;
