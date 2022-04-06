@@ -14,4 +14,5 @@ module.exports = {
   snapUrl: process.env.SNAP_MIDTRANS_URL,
   snapServerKey: process.env.SNAP_MIDTRANS_SERVER_KEY,
   clientUrl: process.env.ALLOW_CLIENT_URL,
+  allowedFileSize: process.env.APP_ALLOWED_FILE_UPLOAD_SIZE,
 };

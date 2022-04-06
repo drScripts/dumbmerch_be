@@ -1,5 +1,6 @@
 const { request, response } = require("express");
 const { Product } = require("../../models");
+const { getFileImageUrlArray } = require("../../helpers");
 
 /**
  *
@@ -10,12 +11,14 @@ module.exports = async (req, res) => {
   try {
     const { id: userId } = req.user;
 
-    const products = await Product.findAll({
+    const rawProducts = await Product.findAll({
       include: "categories",
       where: {
         userId,
       },
     });
+
+    const products = getFileImageUrlArray(rawProducts);
 
     res.send({
       status: "success",

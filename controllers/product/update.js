@@ -3,7 +3,8 @@ const { Product, ProductCategory } = require("../../models");
 const Joi = require("joi");
 const fs = require("fs");
 const path = require("path");
-const { Model, Op } = require("sequelize");
+const { Op } = require("sequelize");
+const { getFileImageUrl } = require("../../helpers");
 
 /**
  *
@@ -16,7 +17,7 @@ module.exports = async (req, res) => {
     const { id } = req.params;
 
     const scheme = Joi.object({
-      name: Joi.string().message({
+      name: Joi.string().messages({
         "string.base": "Product name should be a type of string",
       }),
       price: Joi.number().messages({
@@ -81,7 +82,7 @@ module.exports = async (req, res) => {
     const categoryId = category_ids.map((category, index) => {
       return {
         productId: id,
-        CategoryId: category,
+        categoryId: category,
       };
     });
 
@@ -95,6 +96,8 @@ module.exports = async (req, res) => {
     }
 
     const newProduct = await Product.findByPk(id, { include: "categories" });
+
+    newProduct.image_url = getFileImageUrl(newProduct.image_url);
 
     return res.status(201).json({
       status: "created",

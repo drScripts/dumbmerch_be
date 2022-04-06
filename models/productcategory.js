@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   ProductCategory.init(
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       productId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -32,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      CategoryId: {
+      categoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

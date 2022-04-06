@@ -26,10 +26,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "ProductCategory",
           as: "bridge",
         },
-        foreignKey: {
-          field: "productId",
-          allowNull: true,
-        },
+        foreignKey: "productId",
       });
     }
   }

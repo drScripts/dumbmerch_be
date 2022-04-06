@@ -1,6 +1,5 @@
-const { baseUrl } = require("../config");
 const { sign } = require("jsonwebtoken");
-const { jwtSecret, snapUrl, snapServerKey } = require("../config");
+const { jwtSecret, snapUrl, snapServerKey, baseUrl } = require("../config");
 const axios = require("axios").default;
 
 const getJwtToken = (payload) => {
@@ -114,4 +113,43 @@ const getSnapUrl = async (
   };
 };
 
-module.exports = { getJwtToken, paginationObj, getSnapUrl };
+/**
+ *
+ * @param {string} fileName
+ * @param {string} type "products|profile"
+ * @returns string
+ */
+function getFileImageUrl(fileName, type = "products") {
+  const urlPrefix = baseUrl + "/images/" + type + "/";
+
+  if (fileName.search("http") === -1) {
+    return urlPrefix + fileName;
+  }
+  return fileName;
+}
+
+/**
+ *
+ * @param {object[]} fileNames
+ * @param {string} type "products|profile"
+ * @returns string[]
+ */
+function getFileImageUrlArray(fileNames, type = "products") {
+  const urlPrefix = baseUrl + "/images/" + type + "/";
+
+  return fileNames.map((value) => {
+    if (value.image_url.search("http") === -1) {
+      value.image_url = urlPrefix + value.image_url;
+    }
+
+    return value;
+  });
+}
+
+module.exports = {
+  getJwtToken,
+  paginationObj,
+  getSnapUrl,
+  getFileImageUrl,
+  getFileImageUrlArray,
+};
