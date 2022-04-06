@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Transaction, TransactionItem, Product } = require("../../models");
+const { Transaction, TransactionItem, Product, User } = require("../../models");
 
 /**
  *
@@ -23,7 +23,16 @@ module.exports = async (req, res) => {
           include: {
             model: Product,
             as: "itemProduct",
-            include: "user",
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+            include: {
+              model: User,
+              as: "user",
+              attributes: {
+                exclude: ["password", "createdAt", "updatedAt"],
+              },
+            },
           },
         },
       ],
