@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Transaction, TransactionItem } = require("../../models");
+const { Transaction, TransactionItem, Product } = require("../../models");
 
 /**
  *
@@ -17,7 +17,11 @@ module.exports = async (req, res) => {
         {
           model: TransactionItem,
           as: "transactionItems",
-          include: "itemProduct",
+          include: {
+            model: Product,
+            as: "itemProduct",
+            include: "user",
+          },
         },
       ],
     });
