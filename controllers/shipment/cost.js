@@ -11,8 +11,15 @@ const Joi = require("joi");
 module.exports = async (req, res) => {
   try {
     const scheme = Joi.object({
-      destination_city: Joi.number().required(),
-      courier: Joi.string().valid("jne", "pos", "tiki").required(),
+      destination_city: Joi.number().required().messages({
+        "number.base": "Destination city must be a typ of number",
+        "any.required": "Please add destination_city to query params!",
+      }),
+      courier: Joi.string().valid("jne", "pos", "tiki").required().messages({
+        "string.base": "courier must be a type of string",
+        "any.only": "Courier value must either jne,post,or tiki",
+        "any.required": "Please insert courirer type on query params",
+      }),
     });
 
     const validation = scheme.validate(req.query);
@@ -20,8 +27,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message,
       });
 
     const { destination_city, courier } = req.query;

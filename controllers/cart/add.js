@@ -11,8 +11,15 @@ module.exports = async (req, res) => {
   try {
     const { id: userId } = req.user;
     const scheme = Joi.object({
-      product_id: Joi.number().required(),
-      quantity: Joi.number().min(1).required(),
+      product_id: Joi.number().required().messages({
+        "number.base": "Product must be a type of number",
+        "any.required": "Please insert Product",
+      }),
+      quantity: Joi.number().min(1).required().messages({
+        "number.base": "Quantity must be a type of number",
+        "number.min": "Quantity value must be greater or equal to 1",
+        "any.required": "Please insert Quantity",
+      }),
     });
 
     const validation = scheme.validate(req.body);

@@ -16,11 +16,22 @@ module.exports = async (req, res) => {
     const { id } = req.params;
 
     const scheme = Joi.object({
-      name: Joi.string(),
-      price: Joi.number(),
-      description: Joi.string(),
-      stock: Joi.number().min(1),
-      category_ids: Joi.array(),
+      name: Joi.string().message({
+        "string.base": "Product name should be a type of string",
+      }),
+      price: Joi.number().messages({
+        "number.base": "Price must be a type of number",
+      }),
+      description: Joi.string().messages({
+        "string.base": "Product description must be a type of string",
+      }),
+      stock: Joi.number().min(1).messages({
+        "number.base": "Product stock must be a type of number",
+        "number.min": "Minimal stock was 1",
+      }),
+      category_ids: Joi.array().messages({
+        "array.base": "Category product must be a type of array",
+      }),
     });
 
     const validation = scheme.validate(req.body);
@@ -28,8 +39,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message,
       });
 
     const product = await Product.findByPk(id);

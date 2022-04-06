@@ -26,8 +26,18 @@ const getTotalCost = (carts) => {
 module.exports = async (req, res) => {
   try {
     const scheme = Joi.object({
-      shipment_service: Joi.string().valid("jne", "tiki", "pos").required(),
-      shipment_cost: Joi.number().required(),
+      shipment_service: Joi.string()
+        .valid("jne", "tiki", "pos")
+        .required()
+        .messages({
+          "string.base": "shipment service must be a type of string",
+          "any.only": "shipment service value must either jne,post,or tiki",
+          "any.required": "Please insert shipment servce",
+        }),
+      shipment_cost: Joi.number().required().messages({
+        "number.base": "shipment cost must be a type of number",
+        "any.required": "Please insert shipment cost",
+      }),
     });
 
     const validation = scheme.validate(req.body);
@@ -35,8 +45,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message,
       });
 
     const { shipment_service, shipment_cost } = req.body;

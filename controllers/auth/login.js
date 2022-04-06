@@ -12,8 +12,15 @@ const { getJwtToken } = require("../../helpers");
 module.exports = async (req, res) => {
   try {
     const scheme = Joi.object({
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
+      email: Joi.string().email().required().messages({
+        "string.base": "Email should be a type of string",
+        "string.email": "Email should have a valid email type!",
+        "any.required": "Please insert your email!",
+      }),
+      password: Joi.string().required().messages({
+        "string.base": "Password should be a type of string",
+        "any.required": "Please insert your password!",
+      }),
     });
 
     const validation = scheme.validate(req.body);
@@ -21,8 +28,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message,
       });
 
     const { email, password } = req.body;

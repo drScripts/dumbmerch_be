@@ -11,7 +11,9 @@ module.exports = async (req, res) => {
   try {
     const { id } = req.params;
     const scheme = Joi.object({
-      name: Joi.string(),
+      name: Joi.string().messages({
+        "string.base": "Name must be a type of string",
+      }),
     });
 
     const validation = scheme.validate(req.body);
@@ -19,8 +21,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message,
       });
 
     const { name } = req.body;

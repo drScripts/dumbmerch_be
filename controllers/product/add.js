@@ -1,7 +1,6 @@
 const { request, response } = require("express");
 const Joi = require("joi");
 const { Product, ProductCategory } = require("../../models");
-const { Model } = require("sequelize");
 
 /**
  *
@@ -11,11 +10,27 @@ const { Model } = require("sequelize");
 module.exports = async (req, res) => {
   try {
     const scheme = Joi.object({
-      name: Joi.string().required(),
-      price: Joi.number().required(),
-      description: Joi.string().required(),
-      stock: Joi.number().min(1).required(),
-      category_ids: Joi.array().required(),
+      name: Joi.string().required().message({
+        'string.base':"Product name should be a type of string",
+        'any.required':"Please insert the product name"
+      }),
+      price: Joi.number().required().messages({
+        'number.base':"Price must be a type of number",
+        'any.required':"Please insert product price"
+      }),
+      description: Joi.string().required().messages({
+        'string.base':"Product description must be a type of string",
+        "any.required":"Please insert product description"
+      }),
+      stock: Joi.number().min(1).required().messages({
+        'number.base':"Product stock must be a type of number",
+        'number.min':"Minimal stock was 1",
+        'any.required':"Please insert product stock"
+      }),
+      category_ids: Joi.array().required().messages({
+        'array.base':"Category product must be a type of array",
+        'any.required':"Please insert the product category minimal 1 items"
+      }),
     });
 
     const validation = scheme.validate(req.body);
@@ -23,8 +38,7 @@ module.exports = async (req, res) => {
     if (validation.error)
       return res.status(400).json({
         status: "error",
-        message: "Error body!",
-        validation_error: validation.error.details,
+        message: validation.error.details[0].message, 
       });
 
     const { id: userId } = req.user;

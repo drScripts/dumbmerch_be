@@ -8,7 +8,14 @@ const { Product } = require("../../models");
  */
 module.exports = async (req, res) => {
   try {
-    const products = await Product.findAll({ include: "categories" });
+    const { id: userId } = req.user;
+
+    const products = await Product.findAll({
+      include: "categories",
+      where: {
+        userId,
+      },
+    });
 
     res.send({
       status: "success",
