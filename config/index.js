@@ -13,4 +13,5 @@ module.exports = {
   jwtSecret: process.env.APP_JWT_SECRET,
   snapUrl: process.env.SNAP_MIDTRANS_URL,
   snapServerKey: process.env.SNAP_MIDTRANS_SERVER_KEY,
+  clientUrl: process.env.ALLOW_CLIENT_URL,
 };

@@ -7,8 +7,10 @@
 var app = require("../app");
 var debug = require("debug")("dumbmerch-be:server");
 var http = require("http");
-
-const { baseUrl } = require("../config");
+const { Server } = require("socket.io");
+const socketListener = require("../socket.io");
+const { baseUrl, clientUrl } = require("../config");
+console.log(clientUrl);
 
 /**
  * Get port from environment and store in Express.
@@ -23,6 +25,13 @@ app.set("port", port);
 
 var server = http.createServer(app);
 
+const io = new Server(server, {
+  cors: {
+    methods: ["GET", "POST", "DELETE", "PATCH"],
+    origin: clientUrl,
+  },
+});
+
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -30,6 +39,11 @@ var server = http.createServer(app);
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+
+/**
+ * Listen on socket io events
+ */
+io.on("connect", socketListener);
 
 /**
  * Normalize a port into a number, string, or false.
