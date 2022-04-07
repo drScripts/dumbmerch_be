@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Product } = require("../../models");
+const { Product, Category, User } = require("../../models");
 const { getFileImageUrlArray } = require("../../helpers");
 
 /**
@@ -12,7 +12,22 @@ module.exports = async (req, res) => {
     const { id: userId } = req.user;
 
     const rawProducts = await Product.findAll({
-      include: "categories",
+      include: [
+        {
+          model: Category,
+          as: "categories",
+          through: {
+            as: "category",
+          },
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt"],
+          },
+        },
+      ],
       where: {
         userId,
       },

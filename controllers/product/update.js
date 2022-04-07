@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Product, ProductCategory } = require("../../models");
+const { Product, ProductCategory, Category } = require("../../models");
 const Joi = require("joi");
 const fs = require("fs");
 const path = require("path");
@@ -79,7 +79,7 @@ module.exports = async (req, res) => {
 
     await product.update(data);
 
-    const categoryId = category_ids.map((category, index) => {
+    const categoryId = category_ids?.map((category, index) => {
       return {
         productId: id,
         categoryId: category,
@@ -95,7 +95,24 @@ module.exports = async (req, res) => {
       await ProductCategory.bulkCreate(categoryId);
     }
 
-    const newProduct = await Product.findByPk(id, { include: "categories" });
+    const newProduct = await Product.findByPk(id, {
+      include: {
+        model: Category,
+        as: "categories",
+        through: {
+          as: "category",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
 
     newProduct.image_url = getFileImageUrl(newProduct.image_url);
 

@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Product } = require("../../models");
+const { Product, Category } = require("../../models");
 
 /**
  *
@@ -11,7 +11,22 @@ module.exports = async (req, res) => {
     const { id } = req.params;
 
     const product = await Product.findByPk(id, {
-      include: "categories",
+      include: {
+        model: Category,
+        as: "categories",
+        through: {
+          as: "category",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
     });
 
     res.status(200).json({

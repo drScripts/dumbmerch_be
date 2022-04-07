@@ -50,9 +50,15 @@ module.exports = async (req, res) => {
 
     const newUser = await User.findByPk(user.id, {
       attributes: {
-        exclude: ["password"],
+        exclude: ["password", "createdAt", "updatedAt"],
       },
-      include: "profile",
+      include: {
+        model: UserProfile,
+        as: "profile",
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
     });
 
     return res.status(201).json({

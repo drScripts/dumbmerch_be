@@ -1,5 +1,6 @@
 const { request, response } = require("express");
 const { Transaction, TransactionItem, Product, User } = require("../../models");
+const { getFileImageUrlArray } = require("../../helpers");
 
 /**
  *
@@ -38,9 +39,19 @@ module.exports = async (req, res) => {
       ],
     });
 
+    const newTransactions = transactions.map((transaction, index) => {
+      transaction.transactionItems = getFileImageUrlArray(
+        transaction.transactionItems,
+        "products",
+        "itemProduct"
+      );
+
+      return transaction;
+    });
+
     res.status(200).json({
       status: "success",
-      data: { transactions },
+      data: { transactions: newTransactions },
     });
   } catch (err) {
     console.log(err);

@@ -15,6 +15,6 @@ router.get("/product/:id", show);
 
 router.use(adminMiddleware);
 router.post("/product", fileUpload("image"), add);
-router.patch("/product/:id", fileUpload("image", false), update);
+router.patch("/product/:id", fileUpload("image", "products", false), update);
 router.delete("/product/:id", deleteData);
 module.exports = router;

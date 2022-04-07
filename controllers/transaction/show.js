@@ -1,5 +1,6 @@
 const { request, response } = require("express");
 const { Transaction, TransactionItem, Product, User } = require("../../models");
+const { getFileImageUrl, getFileImageUrlArray } = require("../../helpers");
 
 /**
  *
@@ -32,8 +33,33 @@ module.exports = async (req, res) => {
             },
           },
         },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt"],
+          },
+          include: "profile",
+        },
       ],
     });
+
+    if (!transaction)
+      return res.status(400).json({
+        status: "error",
+        message: "Can't find transaction",
+      });
+
+    transaction.transactionItems = getFileImageUrlArray(
+      transaction.transactionItems,
+      "products",
+      "itemProduct"
+    );
+
+    transaction.user.profile.profile_picture = getFileImageUrl(
+      transaction?.user?.profile?.profile_picture,
+      "users"
+    );
 
     res.status(200).json({
       status: "success",

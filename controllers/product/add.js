@@ -1,6 +1,6 @@
 const { request, response } = require("express");
 const Joi = require("joi");
-const { Product, ProductCategory } = require("../../models");
+const { Product, ProductCategory, Category } = require("../../models");
 const { getFileImageUrl } = require("../../helpers");
 
 /**
@@ -68,7 +68,22 @@ module.exports = async (req, res) => {
     await ProductCategory.bulkCreate(productCategoryObj);
 
     const newProduct = await Product.findByPk(product.id, {
-      include: ["categories"],
+      include: {
+        model: Category,
+        as: "categories",
+        through: {
+          as: "category",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
     });
 
     newProduct.image_url = getFileImageUrl(newProduct.image_url);

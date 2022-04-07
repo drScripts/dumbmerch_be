@@ -1,9 +1,8 @@
 const { request, response } = require("express");
 const { Op } = require("sequelize");
-const { Product, Category } = require("../../models");
+const { Product, Category, User } = require("../../models");
 const { paginationObj } = require("../../helpers");
 const { baseUrl, dbDialect } = require("../../config");
-const { Model } = require("sequelize");
 
 const queryBuilder = (q, start, end) => {
   const obj = {};
@@ -68,10 +67,31 @@ module.exports = async (req, res) => {
     const searchQuery = queryBuilder(q, start, end);
 
     const { count, rows } = await Product.findAndCountAll({
-      include: {
-        as: "categories",
-        model: Category,
-        where: categoryQuery,
+      include: [
+        {
+          as: "categories",
+          model: Category,
+          where: categoryQuery,
+          through: {
+            as: "category",
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+          },
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt"],
+          },
+        },
+      ],
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
       },
       where: searchQuery,
       offset: dataOffset,

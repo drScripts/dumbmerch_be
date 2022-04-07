@@ -8,7 +8,11 @@ const { Category } = require("../../models");
  */
 module.exports = async (req, res) => {
   try {
-    const categories = await Category.findAll();
+    const categories = await Category.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
 
     res.status(200).json({
       status: "success",

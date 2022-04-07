@@ -134,12 +134,19 @@ function getFileImageUrl(fileName, type = "products") {
  * @param {string} type "products|profile"
  * @returns string[]
  */
-function getFileImageUrlArray(fileNames, type = "products") {
+function getFileImageUrlArray(fileNames, type = "products", throughIndex) {
   const urlPrefix = baseUrl + "/images/" + type + "/";
 
   return fileNames.map((value) => {
-    if (value.image_url.search("http") === -1) {
-      value.image_url = urlPrefix + value.image_url;
+    if (!throughIndex) {
+      if (value?.image_url?.search("http") === -1) {
+        value.image_url = urlPrefix + value.image_url;
+      }
+    } else {
+      if (value[throughIndex]?.image_url?.search("http") === -1) {
+        value[throughIndex].image_url =
+          urlPrefix + value[throughIndex].image_url;
+      }
     }
 
     return value;

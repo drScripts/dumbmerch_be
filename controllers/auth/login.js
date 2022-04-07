@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { request, response } = require("express");
-const { User } = require("../../models");
+const { User, UserProfile } = require("../../models");
 const { compareSync } = require("bcrypt");
 const { getJwtToken } = require("../../helpers");
 
@@ -33,7 +33,19 @@ module.exports = async (req, res) => {
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email }, include: "profile" });
+    const user = await User.findOne({
+      where: { email },
+      include: {
+        model: UserProfile,
+        as: "profile",
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
 
     if (!user)
       return res.status(404).json({
