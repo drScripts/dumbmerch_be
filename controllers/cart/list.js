@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    res.send({
+    res.status(200).json({
       status: "success",
       data: { carts },
     });

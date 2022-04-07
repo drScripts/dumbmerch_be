@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   try {
     const categories = await Category.findAll();
 
-    res.send({
+    res.status(200).json({
       status: "success",
       data: { categories },
     });

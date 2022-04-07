@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
 
     const provences = data.rajaongkir.results;
 
-    return res.send({
+    return res.status(200).json({
       status: "success",
       data: provences,
     });

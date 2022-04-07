@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
 
     const products = getFileImageUrlArray(rawProducts);
 
-    res.send({
+    res.status(200).json({
       status: "success",
       data: {
         products,

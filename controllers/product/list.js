@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
       return val;
     });
 
-    res.send({
+    res.status(200).json({
       status: "success",
       data: {
         products: rows,

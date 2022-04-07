@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       include: "categories",
     });
 
-    res.send({
+    res.status(200).json({
       status: "success",
       data: { product },
     });
