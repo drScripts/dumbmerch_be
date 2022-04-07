@@ -8,10 +8,10 @@ const { allowedFileSize } = require("../config");
  * @param {boolean} required is request should upload the image or not
  * @returns
  */
-exports.uploadFile = (imageFile, required = true) => {
+exports.uploadFile = (imageFile, folderName = "products", required = true) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      const folderPath = path.join(__dirname, "../public/images/products");
+      const folderPath = path.join(__dirname, `../public/images/${folderName}`);
       cb(null, folderPath);
     },
     filename: (req, file, cb) => {

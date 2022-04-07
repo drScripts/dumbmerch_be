@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const { fileUpload } = require("../middleware");
+const { update, show } = require("../controllers/users");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get("/user", show);
+router.patch("/user", fileUpload("image", "users", false), update);
 
 module.exports = router;

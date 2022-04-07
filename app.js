@@ -30,6 +30,6 @@ app.use(prefix, cartRouter);
 app.use(prefix, categoryRouter);
 app.use(prefix, shipmentRouter);
 app.use(prefix, transactionRouter);
-app.use("/users", usersRouter);
+app.use(prefix, usersRouter);
 
 module.exports = app;

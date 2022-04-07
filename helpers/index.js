@@ -122,7 +122,7 @@ const getSnapUrl = async (
 function getFileImageUrl(fileName, type = "products") {
   const urlPrefix = baseUrl + "/images/" + type + "/";
 
-  if (fileName.search("http") === -1) {
+  if (fileName?.search("http") === -1) {
     return urlPrefix + fileName;
   }
   return fileName;
