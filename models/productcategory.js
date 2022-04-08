@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
             tableName: "products",
           },
         },
+        onDelete: "CASCADE",
       },
       categoryId: {
         type: DataTypes.INTEGER,
@@ -48,10 +49,12 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
         field: "categoryId",
+        onDelete: "CASCADE",
       },
     },
     {
       sequelize,
+      timestamps: true,
       modelName: "ProductCategory",
       tableName: "product_categories",
     }

@@ -23,6 +23,7 @@ module.exports = {
             tableName: "products",
           },
         },
+        onDelete: "CASCADE",
       },
       categoryId: {
         type: Sequelize.INTEGER,
@@ -33,6 +34,7 @@ module.exports = {
             tableName: "categories",
           },
         },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
