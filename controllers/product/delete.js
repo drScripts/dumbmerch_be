@@ -1,6 +1,5 @@
 const { request, response } = require("express");
-const { Product, ProductCategory } = require("../../models");
-const { Op } = require("sequelize");
+const { Product } = require("../../models");
 const path = require("path");
 const fs = require("fs");
 
@@ -29,10 +28,6 @@ module.exports = async (req, res) => {
     if (fs.existsSync(imagePath)) {
       fs.unlinkSync(imagePath);
     }
-
-    await ProductCategory.destroy({
-      where: { [Op.or]: { productId: id } },
-    });
 
     await product.destroy();
 
