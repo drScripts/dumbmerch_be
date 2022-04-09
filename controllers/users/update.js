@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
       "users"
     );
 
-    res.status(200).json({
+    res.status(201).json({
       status: "success",
       data: { user },
     });

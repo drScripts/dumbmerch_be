@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
         model: UserProfile,
         as: "profile",
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: ["id", "userId", "createdAt", "updatedAt"],
         },
       },
       attributes: {

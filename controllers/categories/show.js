@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
         message: "Cant find category",
       });
 
-    res.status(201).json({
+    res.status(200).json({
       status: "created",
       data: { category },
     });

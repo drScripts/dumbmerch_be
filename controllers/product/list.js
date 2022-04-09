@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
       page = 1,
       start = null,
       end = null,
-      category,
+      category = null,
     } = req.query;
 
     const dataLimit = 10;
@@ -81,6 +81,7 @@ module.exports = async (req, res) => {
           attributes: {
             exclude: ["createdAt", "updatedAt"],
           },
+          required: category !== null,
         },
         {
           model: User,
