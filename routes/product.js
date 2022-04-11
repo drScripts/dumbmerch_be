@@ -13,8 +13,11 @@ router.get("/products", list);
 router.get("/products/all", all);
 router.get("/product/:id", show);
 
-router.use(adminMiddleware);
-router.post("/product", fileUpload("image"), add);
-router.patch("/product/:id", fileUpload("image", "products", false), update);
-router.delete("/product/:id", deleteData);
+router.post("/product", [adminMiddleware, fileUpload("image")], add);
+router.patch(
+  "/product/:id",
+  [adminMiddleware, fileUpload("image", "products", false)],
+  update
+);
+router.delete("/product/:id", adminMiddleware, deleteData);
 module.exports = router;
