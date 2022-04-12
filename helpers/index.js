@@ -1,37 +1,38 @@
-const { sign } = require("jsonwebtoken");
-const { jwtSecret, snapUrl, snapServerKey, baseUrl } = require("../config");
-const axios = require("axios").default;
+const { sign } = require('jsonwebtoken')
+const { jwtSecret, snapUrl, snapServerKey, baseUrl } = require('../config')
+const axios = require('axios').default
+const { sha512 } = require('js-sha512')
 
 const getJwtToken = (payload) => {
-  const token = sign(payload, jwtSecret);
-  return token;
-};
+  const token = sign(payload, jwtSecret)
+  return token
+}
 
 const paginationObj = (
   length,
   limit = 10,
   currentPage = 1,
-  queryOption = {}
+  queryOption = {},
 ) => {
-  let prev = "null",
-    next = "null";
-  const totalPage = Math.ceil(length / limit);
+  let prev = 'null',
+    next = 'null'
+  const totalPage = Math.ceil(length / limit)
 
   if (parseInt(currentPage) > 1) {
-    prev = `${baseUrl}/api/v1/products?page=${parseInt(currentPage) - 1}`;
+    prev = `${baseUrl}/api/v1/products?page=${parseInt(currentPage) - 1}`
 
     for (let query in queryOption) {
-      if (queryOption[query] && queryOption[query] !== "null") {
-        prev += `&${query}=${queryOption[query]}`;
+      if (queryOption[query] && queryOption[query] !== 'null') {
+        prev += `&${query}=${queryOption[query]}`
       }
     }
   }
 
   if (parseInt(currentPage) < totalPage) {
-    next = `${baseUrl}/products?page=${parseInt(currentPage) + 1}`;
+    next = `${baseUrl}/products?page=${parseInt(currentPage) + 1}`
     for (let query in queryOption) {
       if (queryOption[query] != null) {
-        next += `&${query}=${queryOption[query]}`;
+        next += `&${query}=${queryOption[query]}`
       }
     }
   }
@@ -40,8 +41,8 @@ const paginationObj = (
     total_page: totalPage,
     prev,
     next,
-  };
-};
+  }
+}
 
 const snapBodyBuilder = (
   carts,
@@ -49,7 +50,7 @@ const snapBodyBuilder = (
   transaction,
   total,
   shipment_service,
-  shipment_cost
+  shipment_cost,
 ) => {
   const item_details = carts.map((cart, index) => {
     return {
@@ -57,31 +58,31 @@ const snapBodyBuilder = (
       price: cart.product.price,
       quantity: cart.qty,
       name: cart.product.name.substring(0, 50),
-    };
-  });
+    }
+  })
 
   item_details.push({
-    id: "shipments-01",
+    id: 'shipments-01',
     price: shipment_cost,
     quantity: 1,
     name: `Shipment with ${shipment_service.toUpperCase()}`,
-  });
+  })
 
   const customer_details = {
     first_name: user.name,
     email: user.email,
     phone: user.phone_number,
-  };
-  let r = (Math.random() + 1).toString(36).substring(7);
+  }
+  let r = (Math.random() + 1).toString(36).substring(7)
   return {
     transaction_details: {
-      order_id: transaction.id + "-" + r,
+      order_id: transaction.id + '-' + r,
       gross_amount: total,
     },
     item_details,
     customer_details,
-  };
-};
+  }
+}
 
 const getSnapUrl = async (
   carts,
@@ -89,17 +90,17 @@ const getSnapUrl = async (
   transaction,
   total,
   shipment_service,
-  shipment_cost
+  shipment_cost,
 ) => {
-  const auth = Buffer.from(snapServerKey + ":").toString("base64");
+  const auth = Buffer.from(snapServerKey + ':').toString('base64')
   const bodyData = snapBodyBuilder(
     carts,
     user,
     transaction,
     total,
     shipment_service,
-    shipment_cost
-  );
+    shipment_cost,
+  )
   const { data, status, message } = await axios
     .post(snapUrl, bodyData, {
       headers: {
@@ -110,16 +111,16 @@ const getSnapUrl = async (
       return {
         message: err?.response?.messages,
         status: err?.response?.status,
-      };
-    });
+      }
+    })
 
   return {
     url: data?.redirect_url,
     bodyData,
     status,
     message,
-  };
-};
+  }
+}
 
 /**
  *
@@ -127,13 +128,13 @@ const getSnapUrl = async (
  * @param {string} type "products|profile"
  * @returns string
  */
-function getFileImageUrl(fileName, type = "products") {
-  const urlPrefix = baseUrl + "/images/" + type + "/";
+function getFileImageUrl(fileName, type = 'products') {
+  const urlPrefix = baseUrl + '/images/' + type + '/'
 
-  if (fileName?.search("http") === -1) {
-    return urlPrefix + fileName;
+  if (fileName?.search('http') === -1) {
+    return urlPrefix + fileName
   }
-  return fileName;
+  return fileName
 }
 
 /**
@@ -142,23 +143,34 @@ function getFileImageUrl(fileName, type = "products") {
  * @param {string} type "products|profile"
  * @returns string[]
  */
-function getFileImageUrlArray(fileNames, type = "products", throughIndex) {
-  const urlPrefix = baseUrl + "/images/" + type + "/";
+function getFileImageUrlArray(fileNames, type = 'products', throughIndex) {
+  const urlPrefix = baseUrl + '/images/' + type + '/'
 
   return fileNames.map((value) => {
     if (!throughIndex) {
-      if (value?.image_url?.search("http") === -1) {
-        value.image_url = urlPrefix + value.image_url;
+      if (value?.image_url?.search('http') === -1) {
+        value.image_url = urlPrefix + value.image_url
       }
     } else {
-      if (value[throughIndex]?.image_url?.search("http") === -1) {
+      if (value[throughIndex]?.image_url?.search('http') === -1) {
         value[throughIndex].image_url =
-          urlPrefix + value[throughIndex].image_url;
+          urlPrefix + value[throughIndex].image_url
       }
     }
 
-    return value;
-  });
+    return value
+  })
+}
+
+/**
+ *
+ * @param {number|string} order_id
+ * @param {number|string} status_code
+ * @param {number|string} gross_amount
+ * @returns
+ */
+const validateSignatureMidtransKey = (order_id, status_code, gross_amount) => {
+  return sha512(order_id + status_code + gross_amount + snapServerKey)
 }
 
 module.exports = {
@@ -167,4 +179,5 @@ module.exports = {
   getSnapUrl,
   getFileImageUrl,
   getFileImageUrlArray,
-};
+  validateSignatureMidtransKey,
+}
