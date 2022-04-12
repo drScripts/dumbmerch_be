@@ -23,6 +23,7 @@ module.exports = {
           },
         },
         allowNull: true,
+        onDelete: "CASCADE",
       },
       status: {
         type: Sequelize.STRING,

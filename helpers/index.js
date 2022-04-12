@@ -21,7 +21,7 @@ const paginationObj = (
     prev = `${baseUrl}/api/v1/products?page=${parseInt(currentPage) - 1}`;
 
     for (let query in queryOption) {
-      if (queryOption[query] != null) {
+      if (queryOption[query] && queryOption[query] !== "null") {
         prev += `&${query}=${queryOption[query]}`;
       }
     }
@@ -56,7 +56,7 @@ const snapBodyBuilder = (
       id: cart.product.id,
       price: cart.product.price,
       quantity: cart.qty,
-      name: cart.product.name,
+      name: cart.product.name.substring(0, 50),
     };
   });
 
@@ -100,16 +100,24 @@ const getSnapUrl = async (
     shipment_service,
     shipment_cost
   );
-  console.log(auth);
-  const { data } = await axios.post(snapUrl, bodyData, {
-    headers: {
-      Authorization: `Basic ${auth}`,
-    },
-  });
+  const { data, status, message } = await axios
+    .post(snapUrl, bodyData, {
+      headers: {
+        Authorization: `Basic ${auth}`,
+      },
+    })
+    .catch((err) => {
+      return {
+        message: err?.response?.messages,
+        status: err?.response?.status,
+      };
+    });
 
   return {
-    url: data.redirect_url,
+    url: data?.redirect_url,
     bodyData,
+    status,
+    message,
   };
 };
 

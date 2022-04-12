@@ -34,6 +34,7 @@ module.exports = {
           key: "id",
           model: { tableName: "users" },
         },
+        onDelete: "CASCADE",
       },
       profile_picture: {
         type: Sequelize.TEXT,

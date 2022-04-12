@@ -33,6 +33,11 @@ module.exports = {
             tableName: "transactions",
           },
         },
+        onDelete: "CASCADE",
+      },
+      qty: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

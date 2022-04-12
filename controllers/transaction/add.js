@@ -75,6 +75,7 @@ module.exports = async (req, res) => {
       return {
         productId: cart.product.id,
         transactionId: transaction.id,
+        qty: cart.qty,
       };
     });
 
@@ -88,7 +89,7 @@ module.exports = async (req, res) => {
       status: "SHIPMENT CREATED",
     });
 
-    const { bodyData, url } = await getSnapUrl(
+    const { bodyData, url, status } = await getSnapUrl(
       carts,
       req.user,
       transaction,
@@ -96,6 +97,15 @@ module.exports = async (req, res) => {
       shipment_service,
       shipment_cost
     );
+
+    if (status !== 201) {
+      await transaction.destroy();
+
+      return res.status(500).json({
+        status: "error",
+        message: "Internal server error",
+      });
+    }
 
     await transaction.update({
       payment_url: url,
@@ -124,7 +134,7 @@ module.exports = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.response.data);
     res.status(500).json({
       status: "error",
       message: "Internal server error",

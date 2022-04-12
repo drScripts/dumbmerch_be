@@ -10,7 +10,6 @@ const { jwtSecret } = require("../config");
  */
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization);
   if (!authorization || authorization?.search("Bearer ") === -1)
     return res.status(401).json({
       status: "Un-Authorized",

@@ -1,4 +1,5 @@
 const { request, response } = require("express");
+const { getFileImageUrl } = require("../../helpers");
 const { Cart, User } = require("../../models");
 
 /**
@@ -24,6 +25,11 @@ module.exports = async (req, res) => {
       where: {
         userId,
       },
+    });
+
+    carts.map((cart, index) => {
+      cart.product.image_url = getFileImageUrl(cart.product.image_url);
+      return cart;
     });
 
     res.status(200).json({

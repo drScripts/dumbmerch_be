@@ -7,7 +7,7 @@ const { baseUrl, dbDialect } = require("../../config");
 const queryBuilder = (q, start, end) => {
   const obj = {};
   if (q || start || end) {
-    if (q) {
+    if (q && q !== "null") {
       if (dbDialect === "postgres") {
         obj.name = {
           [Op.iLike]: `%${q}%`,
@@ -19,19 +19,19 @@ const queryBuilder = (q, start, end) => {
       }
     }
 
-    if (start) {
+    if (start && start !== "null") {
       obj.price = {
         [Op.gte]: start,
       };
     }
 
-    if (end) {
+    if (end && end !== "null") {
       obj.price = {
         [Op.lte]: end,
       };
     }
 
-    if (start && end) {
+    if (start && start !== "null" && end && end !== "null") {
       obj.price = {
         [Op.between]: [start, end],
       };
@@ -60,10 +60,10 @@ module.exports = async (req, res) => {
       category = null,
     } = req.query;
 
-    const dataLimit = 10;
-    const dataOffset = page * dataLimit - dataLimit;
+    const dataLimit = page * 10;
 
-    const categoryQuery = category ? { id: category } : {};
+    const categoryQuery =
+      category && category != "null" ? { id: category } : {};
     const searchQuery = queryBuilder(q, start, end);
 
     const { count, rows } = await Product.findAndCountAll({
@@ -95,7 +95,6 @@ module.exports = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
       where: searchQuery,
-      offset: dataOffset,
       limit: dataLimit,
     });
 

@@ -28,6 +28,7 @@ module.exports = {
             tableName: "users",
           },
         },
+        onDelete: "CASCADE",
       },
       payment_type: {
         type: Sequelize.STRING,

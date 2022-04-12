@@ -1,5 +1,6 @@
 const { request, response } = require("express");
 const { Product, Category } = require("../../models");
+const { getFileImageUrl } = require("../../helpers");
 
 /**
  *
@@ -28,6 +29,8 @@ module.exports = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
     });
+
+    product.image_url = getFileImageUrl(product.image_url);
 
     res.status(200).json({
       status: "success",

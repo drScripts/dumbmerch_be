@@ -61,6 +61,8 @@ module.exports = async (req, res) => {
       },
     });
 
+    newUser.profile.image_url = getFileImageUrl(newUser.profile.image_url);
+
     return res.status(201).json({
       status: "created",
       data: {

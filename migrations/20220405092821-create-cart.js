@@ -1,5 +1,12 @@
 "use strict";
+const { QueryInterface, DataTypes } = require("sequelize");
+
 module.exports = {
+  /**
+   *
+   * @param {QueryInterface} queryInterface
+   * @param {DataTypes} Sequelize
+   */
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Carts", {
       id: {
@@ -11,10 +18,24 @@ module.exports = {
       productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          key: "id",
+          model: {
+            tableName: "products",
+          },
+        },
+        onDelete: "CASCADE",
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          key: "id",
+          model: {
+            tableName: "users",
+          },
+        },
+        onDelete: "CASCADE",
       },
       qty: {
         type: Sequelize.INTEGER,

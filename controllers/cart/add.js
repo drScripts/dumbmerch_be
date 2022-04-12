@@ -54,7 +54,7 @@ module.exports = async (req, res) => {
     } else {
       await Cart.create({
         userId,
-        quantity,
+        qty: quantity,
         productId,
       });
     }

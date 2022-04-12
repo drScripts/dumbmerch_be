@@ -23,6 +23,7 @@ module.exports = {
           },
         },
         allowNull: false,
+        onDelete: "CASCADE",
       },
       raw_response: {
         type: Sequelize.JSON,

@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
       },
+      qty: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
