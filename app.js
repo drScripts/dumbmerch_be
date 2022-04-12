@@ -26,12 +26,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 const prefix = '/api/v1'
 app.post('/webhook/midtrans', webHook)
 app.use(prefix, authRouter)
-app.use(authMiddleware)
-app.use(prefix, productRouter)
-app.use(prefix, cartRouter)
-app.use(prefix, categoryRouter)
-app.use(prefix, shipmentRouter)
-app.use(prefix, transactionRouter)
-app.use(prefix, usersRouter)
+app.use(prefix, authMiddleware, productRouter)
+app.use(prefix, authMiddleware, cartRouter)
+app.use(prefix, authMiddleware, categoryRouter)
+app.use(prefix, authMiddleware, shipmentRouter)
+app.use(prefix, authMiddleware, transactionRouter)
+app.use(prefix, authMiddleware, usersRouter)
 
 module.exports = app

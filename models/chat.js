@@ -8,74 +8,81 @@ const { Model, Sequelize, DataTypes } = require('sequelize')
  * @returns
  */
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Chat extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      User.hasOne(models.UserProfile, {
-        as: 'profile',
-        foreignKey: 'userId',
-        onDelete: 'CASCADE',
-      })
-
-      User.hasMany(models.Chat, {
+      Chat.belongsTo(models.User, {
         as: 'recipient',
         foreignKey: 'idRecipient',
         onDelete: 'CASCADE',
       })
-
-      User.hasMany(models.Chat, {
+      Chat.belongsTo(models.User, {
         as: 'sender',
         foreignKey: 'idSender',
         onDelete: 'CASCADE',
       })
     }
   }
-  User.init(
+  Chat.init(
     {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
+      message: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.ENUM,
-        values: ['admin', 'user'],
-        defaultValue: 'user',
+      idSender: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'users',
+          },
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      idRecipient: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'users',
+          },
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      timestamp: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: Date.now(),
       },
       createdAt: {
         type: DataTypes.DATE,
-        defaultValue: new Date(),
         allowNull: false,
+        defaultValue: new Date(),
       },
       updatedAt: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: Sequelize.DATE,
         defaultValue: new Date(),
       },
     },
     {
       sequelize,
+      modelName: 'Chat',
       timestamps: true,
-      modelName: 'User',
+      tableName: 'chats',
     },
   )
-  return User
+  return Chat
 }
