@@ -13,6 +13,10 @@ module.exports = {
   jwtSecret: process.env.APP_JWT_SECRET,
   snapUrl: process.env.SNAP_MIDTRANS_URL,
   snapServerKey: process.env.SNAP_MIDTRANS_SERVER_KEY,
+  snapIsProduction: process.env.SNAP_MIDTRANS_IS_PRODUCTION === "true",
+  snapClientKey: process.env.SNAP_MIDTRANS_CLIENT_KEY,
   clientUrl: process.env.ALLOW_CLIENT_URL,
   allowedFileSize: process.env.APP_ALLOWED_FILE_UPLOAD_SIZE,
+  systemEmail: process.env.SYSTEM_EMAIL,
+  systemEmailPassword: process.env.SYSTEM_EMAIL_PASS,
 };

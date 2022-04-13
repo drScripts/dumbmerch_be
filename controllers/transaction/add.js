@@ -6,7 +6,7 @@ const {
   ShipmentLogs,
   Product,
 } = require("../../models");
-const { getSnapUrl } = require("../../helpers");
+const { getSnapUrl, getSnapUrlPack } = require("../../helpers");
 
 const Joi = require("joi");
 
@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
       status: "SHIPMENT CREATED",
     });
 
-    const { bodyData, url, status } = await getSnapUrl(
+    const { bodyData, url, status } = await getSnapUrlPack(
       carts,
       req.user,
       transaction,

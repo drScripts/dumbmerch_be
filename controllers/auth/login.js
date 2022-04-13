@@ -61,7 +61,10 @@ module.exports = async (req, res) => {
 
     delete user.dataValues.password;
 
-    user.profile.image_url = getFileImageUrl(user.profile.image_url);
+    user.profile.profile_picture = getFileImageUrl(
+      user?.profile?.profile_picture,
+      "users"
+    );
 
     const jwt = getJwtToken(user.dataValues);
 
