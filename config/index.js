@@ -19,4 +19,5 @@ module.exports = {
   allowedFileSize: process.env.APP_ALLOWED_FILE_UPLOAD_SIZE,
   systemEmail: process.env.SYSTEM_EMAIL,
   systemEmailPassword: process.env.SYSTEM_EMAIL_PASS,
+  midtransCallbackUrl: process.env.SNAP_MIDTRANS_CALLBACK_BASE_URL,
 };

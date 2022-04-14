@@ -153,6 +153,7 @@ const getSnapUrlPack = async (
       shipment_service,
       shipment_cost
     );
+
     const { redirect_url } = await snap.createTransaction(bodyData);
 
     return {

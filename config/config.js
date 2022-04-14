@@ -18,11 +18,14 @@ module.exports = {
     port: dbPort,
   },
   production: {
-    username: dbUser,
-    password: dbPass,
-    database: dbName,
-    host: dbHost,
-    dialect: dbDialect,
-    port: dbPort,
+    use_env_variable: "DATABASE_URL",
+    dialect: "postgres",
+    protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   },
 };

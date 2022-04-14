@@ -12,7 +12,7 @@ const cartRouter = require("./routes/carts");
 const categoryRouter = require("./routes/categories");
 const shipmentRouter = require("./routes/shipment");
 const transactionRouter = require("./routes/transaction");
-const { webHook } = require("./controllers/transaction");
+const { webHook, callback } = require("./controllers/transaction");
 
 const app = express();
 
@@ -25,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const prefix = "/api/v1";
 app.post(`${prefix}/notification`, webHook);
+app.post(`${prefix}/callback`, callback);
 app.use(prefix, authRouter);
 app.use(prefix, authMiddleware, productRouter);
 app.use(prefix, authMiddleware, cartRouter);
