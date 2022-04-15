@@ -41,5 +41,13 @@ module.exports = {
     dialect: dbDialect,
     port: dbPort,
   },
-  production: productionConfig,
+  production: {
+    use_env_variable: "DATABASE_URL",
+    dialect: "postgres",
+    protocol: "postgres",
+    ssl: {
+      require: dbIsSSL,
+      rejectUnauthorized: dbrejectUnAuthorized,
+    },
+  },
 };
