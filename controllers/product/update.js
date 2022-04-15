@@ -4,7 +4,12 @@ const Joi = require("joi");
 const fs = require("fs");
 const path = require("path");
 const { Op } = require("sequelize");
-const { getFileImageUrl } = require("../../helpers");
+const {
+  getFileImageUrl,
+  cloudImageStore,
+  cloudImageDelete,
+} = require("../../helpers");
+const { appIsproduction } = require("../../config");
 
 /**
  *
@@ -56,16 +61,21 @@ module.exports = async (req, res) => {
     let data = {};
 
     if (file) {
-      data.image_name = file.filename;
-      data.image_url = file.filename;
-
-      const imagePath = path.resolve(
-        __dirname,
-        "../../public/images/products/" + product.image_name
-      );
-
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+      if (appIsproduction) {
+        const { file_name, image_url } = await cloudImageStore(file);
+        data.image_name = file_name;
+        data.image_url = image_url;
+        await cloudImageDelete(product?.image_name);
+      } else {
+        data.image_name = file.filename;
+        data.image_url = file.filename;
+        const imagePath = path.resolve(
+          __dirname,
+          "../../public/images/products/" + product.image_name
+        );
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
       }
     }
 

@@ -1,4 +1,28 @@
-const { dbDialect, dbHost, dbName, dbPass, dbPort, dbUser } = require("./");
+const {
+  dbDialect,
+  dbHost,
+  dbName,
+  dbPass,
+  dbPort,
+  dbUser,
+  dbIsSSL,
+  dbrejectUnAuthorized,
+} = require("./");
+
+const productionConfig = {
+  use_env_variable: "DATABASE_URL",
+  dialect: "postgres",
+  protocol: "postgres",
+};
+
+if (dbIsSSL) {
+  productionConfig.dialectOptions = {
+    ssl: {
+      require: dbIsSSL,
+      rejectUnauthorized: dbrejectUnAuthorized,
+    },
+  };
+}
 
 module.exports = {
   development: {
@@ -17,15 +41,5 @@ module.exports = {
     dialect: dbDialect,
     port: dbPort,
   },
-  production: {
-    use_env_variable: "DATABASE_URL",
-    dialect: "postgres",
-    protocol: "postgres",
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
-  },
+  production: productionConfig,
 };

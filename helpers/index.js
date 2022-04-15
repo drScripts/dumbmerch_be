@@ -7,11 +7,15 @@ const {
   snapIsProduction,
   systemEmail,
   systemEmailPassword,
+  cloudinaryApiKey,
+  cloudinaryApiSecret,
+  cloudinaryName,
 } = require("../config");
 const axios = require("axios").default;
 const { sha512 } = require("js-sha512");
 const { Snap } = require("midtrans-client");
 const { createTransport, createTestAccount } = require("nodemailer");
+const cloudinary = require("cloudinary").v2;
 
 const getJwtToken = (payload) => {
   const token = sign(payload, jwtSecret);
@@ -950,6 +954,44 @@ const sendMail = async (user_email, invoice_html) => {
   });
 };
 
+const cloudImageStore = async (
+  fileImage,
+  folderName = "dumbmerch_products"
+) => {
+  cloudinary.config({
+    api_key: cloudinaryApiKey,
+    api_secret: cloudinaryApiSecret,
+    cloud_name: cloudinaryName,
+  });
+
+  const {
+    secure_url: image_url,
+    public_id,
+    format,
+  } = await cloudinary.uploader.upload(fileImage?.path, {
+    use_filename: true,
+    folder: folderName,
+    unique_filename: false,
+  });
+
+  return {
+    image_url,
+    file_name: `${public_id}.${format}`,
+  };
+};
+
+const cloudImageDelete = async (file_name) => {
+  cloudinary.config({
+    api_key: cloudinaryApiKey,
+    api_secret: cloudinaryApiSecret,
+    cloud_name: cloudinaryName,
+  });
+
+  const public_id = file_name?.split(".")[0];
+
+  await cloudinary.uploader.destroy(public_id, { resource_type: "image" });
+};
+
 module.exports = {
   getJwtToken,
   paginationObj,
@@ -961,4 +1003,6 @@ module.exports = {
   emailInvoiceHtml,
   sendMailTest,
   sendMail,
+  cloudImageStore,
+  cloudImageDelete,
 };

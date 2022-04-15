@@ -1,7 +1,14 @@
 const { request, response } = require("express");
 const Joi = require("joi");
 const { UserProfile, User } = require("../../models");
-const { getFileImageUrl } = require("../../helpers");
+const {
+  getFileImageUrl,
+  cloudImageStore,
+  cloudImageDelete,
+} = require("../../helpers");
+const { appIsproduction } = require("../../config");
+const fs = require("fs");
+const path = require("path");
 
 /**
  *
@@ -38,8 +45,36 @@ module.exports = async (req, res) => {
 
     const data = { phone_number, gender, address };
 
+    const userProfile = await UserProfile.findOne({ where: { userId: id } });
+
+    if (!userProfile)
+      return res.status(404).json({
+        status: "error",
+        message: "User not found!",
+      });
+
     if (file) {
-      data.profile_picture = file.filename;
+      if (appIsproduction) {
+        const { image_url } = await cloudImageStore(file, "dumbmerch_users");
+
+        if (userProfile?.profile_picture) {
+          const urlImageName = userProfile?.profile_picture?.split("/")?.pop();
+          const imageName = `dumbmerch_users/${urlImageName}`;
+
+          await cloudImageDelete(imageName);
+        }
+
+        data.profile_picture = image_url;
+      } else {
+        data.profile_picture = file.filename;
+        const imagePath = path.resolve(
+          __dirname,
+          "../../public/images/users/" + userProfile?.profile_picture
+        );
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      }
     }
 
     await UserProfile.update(data, { where: { userId: id } });

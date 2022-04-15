@@ -1,5 +1,5 @@
-'use strict'
-const { Model, Sequelize, DataTypes } = require('sequelize')
+"use strict";
+const { Model, Sequelize, DataTypes } = require("sequelize");
 
 /**
  *
@@ -17,22 +17,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasOne(models.UserProfile, {
-        as: 'profile',
-        foreignKey: 'userId',
-        onDelete: 'CASCADE',
-      })
+        as: "profile",
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
 
       User.hasMany(models.Chat, {
-        as: 'recipient',
-        foreignKey: 'idRecipient',
-        onDelete: 'CASCADE',
-      })
+        as: "recipient",
+        foreignKey: "idRecipient",
+        onDelete: "CASCADE",
+      });
 
       User.hasMany(models.Chat, {
-        as: 'sender',
-        foreignKey: 'idSender',
-        onDelete: 'CASCADE',
-      })
+        as: "sender",
+        foreignKey: "idSender",
+        onDelete: "CASCADE",
+      });
     }
   }
   User.init(
@@ -57,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.ENUM,
-        values: ['admin', 'user'],
-        defaultValue: 'user',
+        values: ["admin", "user"],
+        defaultValue: "user",
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -74,8 +74,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       timestamps: true,
-      modelName: 'User',
-    },
-  )
-  return User
-}
+      modelName: "User",
+      tableName: "users",
+    }
+  );
+  return User;
+};

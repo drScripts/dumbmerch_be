@@ -7,6 +7,8 @@ module.exports = {
   dbName: process.env.DATABASE_NAME,
   dbDialect: process.env.DATABASE_DIALECT,
   dbPort: process.env.DATABASE_PORT,
+  dbIsSSL: process.env.DATABASE_SSL === "true",
+  dbrejectUnAuthorized: process.env.DATABASE_REJECT_UN_AUTHORIZED === "true",
   rajaOngkirKey: process.env.RAJA_ONGKIR_KEY,
   rajaOngkirOrigin: process.env.RAJA_ONGKIR_ORIGIN,
   baseUrl: process.env.APP_BASE_URL,
@@ -20,4 +22,8 @@ module.exports = {
   systemEmail: process.env.SYSTEM_EMAIL,
   systemEmailPassword: process.env.SYSTEM_EMAIL_PASS,
   midtransCallbackUrl: process.env.SNAP_MIDTRANS_CALLBACK_BASE_URL,
+  cloudinaryName: process.env.CLOUDINARY_NAME,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  appIsproduction: process.env.NODE_ENV == "production",
 };

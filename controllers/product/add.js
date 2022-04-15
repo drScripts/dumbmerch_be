@@ -1,7 +1,8 @@
 const { request, response } = require("express");
 const Joi = require("joi");
 const { Product, ProductCategory, Category } = require("../../models");
-const { getFileImageUrl } = require("../../helpers");
+const { getFileImageUrl, cloudImageStore } = require("../../helpers");
+const { appIsproduction } = require("../../config");
 
 /**
  *
@@ -46,7 +47,15 @@ module.exports = async (req, res) => {
     const { name, price, description, stock, category_ids } = req.body;
     const file = req.file;
 
-    const fileName = file.filename;
+    let fileName = file.filename;
+    let file_url = fileName;
+
+    if (appIsproduction) {
+      const { file_name, image_url } = await cloudImageStore(file);
+
+      file_url = image_url;
+      fileName = file_name;
+    }
 
     const product = await Product.create({
       name,
@@ -55,7 +64,7 @@ module.exports = async (req, res) => {
       stock,
       userId,
       image_name: fileName,
-      image_url: fileName,
+      image_url: file_url,
     });
 
     const productCategoryObj = category_ids.map((id, index) => {
