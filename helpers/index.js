@@ -10,6 +10,7 @@ const {
   cloudinaryApiKey,
   cloudinaryApiSecret,
   cloudinaryName,
+  clientUrl,
 } = require("../config");
 const axios = require("axios").default;
 const { sha512 } = require("js-sha512");
@@ -707,7 +708,7 @@ const emailInvoiceHtml = (
                  <tr>
                    <td class="email-masthead">
                      <a
-                       href="http://localhost:3000/"
+                       href="${clientUrl}"
                        class="f-fallback email-masthead_name"
                      >
                        Dumbways Merch
