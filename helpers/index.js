@@ -945,7 +945,7 @@ const sendMail = async (user_email, invoice_html) => {
    */
   const transporter = createTransport({
     host: "smtp-relay.sendinblue.com",
-    port: "587",
+    port: 587,
     auth: {
       user: sendinBlueUser,
       pass: sendinBluePass,
@@ -957,7 +957,7 @@ const sendMail = async (user_email, invoice_html) => {
     to: user_email,
     from: "DumbMerch Team",
     subject: "Your current transaction invoice",
-    html: invoice_html,
+    html: "<html><body>test</body></html>",
     text: "https://dumbmerch-drscripts.netlify.app",
   });
 
