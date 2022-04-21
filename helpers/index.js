@@ -957,6 +957,7 @@ const sendMail = async (user_email, invoice_html) => {
     from: "DumbMerch Team",
     subject: "Your current transaction invoice",
     html: invoice_html,
+    text: "https://dumbmerch-drscripts.netlify.app",
   });
 
   /**
