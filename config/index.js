@@ -26,5 +26,6 @@ module.exports = {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
   appIsproduction: process.env.NODE_ENV == "production",
-  sendinBlueApiKey: process.env.SENDINBLUE_API_KEY,
+  sendinBluePass: process.env.SENDIN_BLUE_PASS,
+  sendinBlueUser: process.env.SENDIN_BLUE_USER,
 };

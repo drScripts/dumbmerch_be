@@ -11,14 +11,14 @@ const {
   cloudinaryApiSecret,
   cloudinaryName,
   clientUrl,
-  sendinBlueApiKey,
+  sendinBluePass,
+  sendinBlueUser,
 } = require("../config");
 const axios = require("axios").default;
 const { sha512 } = require("js-sha512");
 const { Snap } = require("midtrans-client");
 const { createTransport, createTestAccount } = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
-const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 const getJwtToken = (payload) => {
   const token = sign(payload, jwtSecret);
@@ -940,16 +940,24 @@ const sendMailTest = async (user_email, invoice_html) => {
 };
 
 const sendMail = async (user_email, invoice_html) => {
-  SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
-    sendinBlueApiKey;
-
-  const data = await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
-    sender: { email: "natanwoke@gmail.com", name: "noreply.mailers.com" },
-    subject: user_email,
-    htmlContent: invoice_html,
+  /**
+   * With Sendin Blue
+   */
+  const transporter = createTransport({
+    service: "SendinBlue",
+    auth: {
+      user: sendinBlueUser,
+      pass: sendinBluePass,
+    },
   });
 
-  console.log("EMAIL DATA", data);
+  await transporter.sendMail({
+    subject: "DumbMerch Invoice",
+    to: user_email,
+    from: "DumbMerch Team",
+    subject: "Your current transaction invoice",
+    html: invoice_html,
+  });
 
   /**
    *
