@@ -955,7 +955,7 @@ const sendMail = async (user_email, invoice_html) => {
   await transporter.sendMail({
     subject: "DumbMerch Invoice",
     to: user_email,
-    from: "DumbMerch Team",
+    from: "noreply.mailers.com",
     subject: "Your current transaction invoice",
     html: "<html><body>test</body></html>",
     text: "https://dumbmerch-drscripts.netlify.app",
