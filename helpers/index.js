@@ -940,6 +940,7 @@ const sendMailTest = async (user_email, invoice_html) => {
 };
 
 const sendMail = async (user_email, invoice_html) => {
+  console.log("LOGGG", sendinBluePass, sendinBlueUser);
   /**
    * With Sendin Blue
    */
