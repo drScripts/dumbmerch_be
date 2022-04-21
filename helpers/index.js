@@ -941,13 +941,15 @@ const sendMailTest = async (user_email, invoice_html) => {
 
 const sendMail = async (user_email, invoice_html) => {
   SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
-    "YOUR_API_KEY";
+    sendinBlueApiKey;
 
-  await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
+  const data = await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
     sender: { email: "natanwoke@gmail.com", name: "noreply.mailers.com" },
     subject: user_email,
     htmlContent: invoice_html,
   });
+
+  console.log("EMAIL DATA", data);
 
   /**
    *
