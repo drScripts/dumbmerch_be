@@ -11,12 +11,14 @@ const {
   cloudinaryApiSecret,
   cloudinaryName,
   clientUrl,
+  sendinBlueApiKey,
 } = require("../config");
 const axios = require("axios").default;
 const { sha512 } = require("js-sha512");
 const { Snap } = require("midtrans-client");
 const { createTransport, createTestAccount } = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 const getJwtToken = (payload) => {
   const token = sign(payload, jwtSecret);
@@ -938,21 +940,34 @@ const sendMailTest = async (user_email, invoice_html) => {
 };
 
 const sendMail = async (user_email, invoice_html) => {
-  const transporter = createTransport({
-    service: "gmail",
-    auth: {
-      user: systemEmail,
-      pass: systemEmailPassword,
-    },
+  SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
+    "YOUR_API_KEY";
+
+  await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
+    sender: { email: "natanwoke@gmail.com", name: "noreply.mailers.com" },
+    subject: user_email,
+    htmlContent: invoice_html,
   });
 
-  await transporter.sendMail({
-    subject: "DumbMerch Invoice",
-    to: user_email,
-    from: "DumbMerch Team",
-    subject: "Your current transaction invoice",
-    html: invoice_html,
-  });
+  /**
+   *
+   * WITH GMAIL
+   */
+  // const transporter = createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: systemEmail,
+  //     pass: systemEmailPassword,
+  //   },
+  // });
+
+  // await transporter.sendMail({
+  //   subject: "DumbMerch Invoice",
+  //   to: user_email,
+  //   from: "DumbMerch Team",
+  //   subject: "Your current transaction invoice",
+  //   html: invoice_html,
+  // });
 };
 
 const cloudImageStore = async (
