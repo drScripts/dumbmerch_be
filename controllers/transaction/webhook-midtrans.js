@@ -86,14 +86,14 @@ module.exports = async (req, res) => {
       } else if (fraud_status == "accept") {
         transactionStatus = "success";
 
-        await sendMail(transaction?.user?.email, invoiceEmail).catch(() => {
-          console.log("FAILED SEND MAIL");
+        await sendMail(transaction?.user?.email, invoiceEmail).catch((err) => {
+          console.log("FAILED SEND MAIL", err);
         });
       }
     } else if (transaction_status == "settlement") {
       transactionStatus = "success";
-      await sendMail(transaction?.user?.email, invoiceEmail).catch(() => {
-        console.log("FAILED SEND MAIL");
+      await sendMail(transaction?.user?.email, invoiceEmail).catch((err) => {
+        console.log("FAILED SEND MAIL", err);
       });
     } else if (
       transaction_status == "cancel" ||
