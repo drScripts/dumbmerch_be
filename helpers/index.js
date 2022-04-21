@@ -944,7 +944,8 @@ const sendMail = async (user_email, invoice_html) => {
    * With Sendin Blue
    */
   const transporter = createTransport({
-    service: "SendinBlue",
+    host: "smtp-relay.sendinblue.com",
+    port: "587",
     auth: {
       user: sendinBlueUser,
       pass: sendinBluePass,
