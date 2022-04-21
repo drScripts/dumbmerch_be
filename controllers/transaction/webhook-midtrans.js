@@ -92,7 +92,9 @@ module.exports = async (req, res) => {
       }
     } else if (transaction_status == "settlement") {
       transactionStatus = "success";
-      await sendMail(transaction?.user?.email, invoiceEmail);
+      await sendMail(transaction?.user?.email, invoiceEmail).catch(() => {
+        console.log("FAILED SEND MAIL");
+      });
     } else if (
       transaction_status == "cancel" ||
       transaction_status == "deny" ||
