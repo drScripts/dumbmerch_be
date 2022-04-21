@@ -24,6 +24,7 @@ const apiClient = new Snap({
  * @param {response} res
  */
 module.exports = async (req, res) => {
+  console.log("NOTIFICATION");
   try {
     const statusResponse = await apiClient.transaction.notification(req.body);
 
@@ -118,7 +119,7 @@ module.exports = async (req, res) => {
     console.log(err);
     return res.status(500).json({
       status: "error",
-      message: "Internal server error",
+      message: err.message,
     });
   }
 };
